@@ -1,39 +1,32 @@
 # algorithms-python
 
-A personal collection of algorithms and data structures implemented in Python for learning, practice, and reference.
+My personal collection of algorithms and data structures implemented in Python for learning, practice, and reference.
 
 ## Features
 
-- Clear Python implementations of common algorithms
-- Data structures and problem-solving patterns
-- Readable code focused on understanding
-- Examples that can be run individually
-- Ongoing additions as I learn and experiment
+- Clear, readable Python implementations
+- Common algorithms and data structures
+- Practice-oriented examples
+- Minimal dependencies
+- Easy to explore and extend
 
 ## Install
 
-Clone the repository and enter the project directory:
+Clone the repository and create a virtual environment:
 
-```bash
-git clone https://github.com/YOUR_USERNAME/algorithms-python.git
-cd algorithms-python
-```
+    git clone https://github.com/YOUR_USERNAME/algorithms-python.git
+    cd algorithms-python
+    python -m venv .venv
 
-No package installation is required unless noted by an individual example.
+Activate it:
+
+    source .venv/bin/activate  # macOS/Linux
+    .venv\Scripts\activate     # Windows
 
 ## Usage
 
-Run an algorithm file directly with Python:
+Run an implementation directly with Python:
 
-```bash
-python path/to/algorithm.py
-```
+    python path/to/algorithm.py
 
-You can also import implementations into your own scripts:
-
-```python
-from path.to.algorithm import algorithm_name
-
-result = algorithm_name(data)
-print(result)
-```
+Browse the repository by topic, open an implementation, and use or adapt it in your own practice code.
