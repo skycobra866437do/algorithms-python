@@ -1,52 +1,108 @@
-"""Reusable helper functions for algorithm implementations."""
+"""General-purpose helpers for algorithm implementations."""
 
-from math import isqrt
+from typing import Callable, Iterable, Iterator, MutableSequence, Optional, Sequence, Tuple, TypeVar
 
-
-def gcd(a: int, b: int) -> int:
-    """Return the non-negative greatest common divisor of two integers."""
-    a, b = abs(a), abs(b)
-    while b:
-        a, b = b, a % b
-    return a
+T = TypeVar("T")
+K = TypeVar("K")
 
 
-def lcm(a: int, b: int) -> int:
-    """Return the non-negative least common multiple of two integers."""
-    if a == 0 or b == 0:
-        return 0
-    return abs((a // gcd(a, b)) * b)
+def swap(items: MutableSequence[T], first: int, second: int) -> None:
+    """Swap two elements in a mutable sequence in place.
+
+    Args:
+        items: Mutable sequence containing the elements.
+        first: Index of the first element.
+        second: Index of the second element.
+
+    Raises:
+        IndexError: If either index is outside the sequence.
+    """
+    items[first], items[second] = items[second], items[first]
 
 
-def is_prime(number: int) -> bool:
-    """Return whether an integer is prime."""
-    if number < 2:
-        return False
-    if number == 2:
+def is_sorted(
+    items: Iterable[T],
+    *,
+    key: Optional[Callable[[T], K]] = None,
+    reverse: bool = False,
+) -> bool:
+    """Return whether an iterable is ordered monotonically.
+
+    Args:
+        items: Values to inspect.
+        key: Optional function used to extract comparison keys.
+        reverse: Check descending order when true; ascending order otherwise.
+
+    Returns:
+        True when every adjacent pair is in the requested order.
+        Empty and single-item iterables are considered sorted.
+    """
+    iterator = iter(items)
+    try:
+        previous_item = next(iterator)
+    except StopIteration:
         return True
-    if number % 2 == 0:
-        return False
 
-    for divisor in range(3, isqrt(number) + 1, 2):
-        if number % divisor == 0:
+    previous = key(previous_item) if key is not None else previous_item
+    for item in iterator:
+        current = key(item) if key is not None else item
+        if reverse:
+            if previous < current:  # type: ignore[operator]
+                return False
+        elif previous > current:  # type: ignore[operator]
             return False
+        previous = current
+
     return True
 
 
-def sieve(limit: int) -> list[int]:
-    """Return all prime numbers less than or equal to a non-negative limit."""
-    if limit < 0:
-        raise ValueError("limit must be non-negative")
-    if limit < 2:
-        return []
+def binary_search(items: Sequence[T], target: T) -> int:
+    """Find a target in an ascending sorted sequence using binary search.
 
-    prime_flags = bytearray(b"\x01") * (limit + 1)
-    prime_flags[0:2] = b"\x00\x00"
+    Args:
+        items: Sequence sorted in ascending order.
+        target: Value to locate.
 
-    for number in range(2, isqrt(limit) + 1):
-        if prime_flags[number]:
-            start = number * number
-            count = ((limit - start) // number) + 1
-            prime_flags[start : limit + 1 : number] = b"\x00" * count
+    Returns:
+        The index of the first matching value, or -1 when no match exists.
+    """
+    low = 0
+    high = len(items)
 
-    return [number for number, flag in enumerate(prime_flags) if flag]
+    while low < high:
+        middle = low + (high - low) // 2
+        if items[middle] < target:  # type: ignore[operator]
+            low = middle + 1
+        else:
+            high = middle
+
+    if low < len(items) and items[low] == target:
+        return low
+    return -1
+
+
+def chunked(items: Iterable[T], size: int) -> Iterator[Tuple[T, ...]]:
+    """Yield values from an iterable in fixed-size chunks.
+
+    Args:
+        items: Values to divide into chunks.
+        size: Maximum number of values in each chunk.
+
+    Yields:
+        Tuples containing up to ``size`` values. The final tuple may be shorter.
+
+    Raises:
+        ValueError: If ``size`` is not positive.
+    """
+    if size <= 0:
+        raise ValueError("size must be greater than zero")
+
+    chunk = []
+    for item in items:
+        chunk.append(item)
+        if len(chunk) == size:
+            yield tuple(chunk)
+            chunk.clear()
+
+    if chunk:
+        yield tuple(chunk)
