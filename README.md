@@ -1,32 +1,23 @@
 # algorithms-python
 
-My personal collection of algorithms and data structures implemented in Python for learning, practice, and reference.
+A small collection of Python utilities for everyday development tasks.
 
 ## Features
 
-- Clear, readable Python implementations
-- Common algorithms and data structures
-- Practice-oriented examples
-- Minimal dependencies
-- Easy to explore and extend
+- Clean, dependency-free helpers
+- Type hints and docstrings
+- Simple command line entry points
+- Works on Python 3.9+
 
 ## Install
 
-Clone the repository and create a virtual environment:
-
-    git clone https://github.com/YOUR_USERNAME/algorithms-python.git
-    cd algorithms-python
-    python -m venv .venv
-
-Activate it:
-
-    source .venv/bin/activate  # macOS/Linux
-    .venv\Scripts\activate     # Windows
+    pip install -r requirements.txt
 
 ## Usage
 
-Run an implementation directly with Python:
+    from utils import slugify, chunk
+    print(slugify('Hello World'))
 
-    python path/to/algorithm.py
+## License
 
-Browse the repository by topic, open an implementation, and use or adapt it in your own practice code.
+MIT
